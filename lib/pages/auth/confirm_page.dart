@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:task/pages/auth/widgets/auth_textfield.dart';
@@ -54,7 +55,25 @@ class _ConfirmPageState extends State<ConfirmPage> {
     } catch (error) {
       setState(() => isLoading = false);
       if (!mounted) return;
-      showError('Code is not right please try again!');
+      String errorMessage = 'Code is not right please try again!';
+
+      if (error is DioException) {
+        final data = error.response?.data;
+
+        if (data != null && data['error'] != null) {
+          final serverError = data['error'].toString().toLowerCase();
+
+          if (serverError.contains('expired')) {
+            errorMessage = 'Code expired!';
+          } else if (serverError.contains('forbidden')) {
+            errorMessage = 'Code is not right!';
+          } else {
+            errorMessage = data['error'];
+          }
+        }
+      }
+
+      showError(errorMessage);
     }
   }
 
