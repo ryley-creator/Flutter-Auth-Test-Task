@@ -2,16 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:task/pages/auth/login_page.dart';
 import 'package:task/services/auth_service.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   final String userId;
 
-  const HomeScreen({super.key, required this.userId});
+  HomeScreen({super.key, required this.userId});
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
   final AuthService authService = AuthService();
 
   @override
@@ -28,9 +23,9 @@ class _HomeScreenState extends State<HomeScreen> {
               Text('Authorized!', style: TextStyle(fontSize: 25)),
               SizedBox(height: 40),
               Text('User ID:', style: TextStyle(fontSize: 25)),
-              Text(widget.userId, style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
+              Text(userId, style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
               SizedBox(height: 100),
-              ElevatedButton(
+              TextButton(
                 onPressed: () async {
                   await authService.logout();
                   Navigator.pushAndRemoveUntil(
@@ -39,13 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     (route) => false,
                   );
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red.shade700,
-                  foregroundColor: Colors.white,
-                  padding: EdgeInsets.symmetric(horizontal: 48, vertical: 16),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                ),
-                child: Text('Logout', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                child: Text('Logout'),
               ),
             ],
           ),
